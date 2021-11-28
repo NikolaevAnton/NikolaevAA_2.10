@@ -7,16 +7,26 @@
 
 import UIKit
 
+protocol UpdateView {
+    func update()
+}
+
 class ViewController: UIViewController {
     
-    
+    @IBOutlet var infoLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let model = NetworkManager.shared.networkRequest()
-        print("VC: \(model.description)")
+        NetworkManager.shared.delegate = self
+        NetworkManager.shared.networkRequest()
     }
+}
 
-
+extension ViewController: UpdateView {
+    func update() {
+        DispatchQueue.main.async {
+            self.infoLabel.text = NetworkManager.shared.model.description
+        }
+    }
 }
 
